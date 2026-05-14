@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from './task.model';
+import { User } from '../auth/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('tasks')
 export class TaskEntity {
@@ -18,4 +20,8 @@ export class TaskEntity {
     default: TaskStatus.OPEN,
   })
   status: TaskStatus;
+
+  @ManyToOne(() => User, (user) => user.tasks, { eager: false })
+  @Exclude({ toPlainOnly: true })
+  user: User;
 }
